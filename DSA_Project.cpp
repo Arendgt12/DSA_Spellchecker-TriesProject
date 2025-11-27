@@ -31,15 +31,28 @@ struct Trie {
         delete root;
     }
 
+    // --- Core Trie Operations ---
+    
+    void insert(const string& word) {
+        TrieNode* current = root;
+        for (char ch : word) {
+            if (current->children.find(ch) == current->children.end()) {
+                current->children[ch] = new TrieNode();
+            }
+            current = current->children[ch];
+        }
+        current->isEnd = true;
+    }
 
 };
 
 
 
 int main() {
-    
+
 
 
     
     return 0;
 }
+
