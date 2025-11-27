@@ -59,6 +59,15 @@ struct Trie {
         removeHelper(root, word, 0);
     }
 
+    vector<string> getSuggestions(const string& word) {
+        vector<string> suggestions;
+        // Edit distance of 1 means one substitution, insertion, or deletion is allowed.
+        const int MAX_DISTANCE = 1; 
+        
+        findSuggestionsHelper(root, word, "", suggestions, MAX_DISTANCE);
+        return suggestions;
+    }
+
 };
 
 
