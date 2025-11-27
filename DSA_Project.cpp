@@ -103,8 +103,8 @@ struct Trie {
                                int maxDistance) {
         
         if (!node) return;
-                               
-        int dist = levenshteinDistance(currentPrefix, targetWord);
+          //calls the distance function                     
+        int dist = Distance(currentPrefix, targetWord);
 
         if (dist > maxDistance && currentPrefix.size() > targetWord.size() + maxDistance) {
             return;
@@ -119,7 +119,35 @@ struct Trie {
         }
     }
 
+    // Calculates the minimum edit distance between two strings
+    int Distance(const string& s1, const string& s2) {
+        int m = s1.length();
+        int n = s2.length();
+        
+        vector<int> dp(n + 1);
+        vector<int> prev_dp(n + 1);
+
+        for (int j = 0; j <= n; j++) {
+            prev_dp[j] = j;
+        }
+
+        for (int i = 1; i <= m; i++) {
+            dp[0] = i; 
+            for (int j = 1; j <= n; j++) {
+                int cost = (s1[i - 1] == s2[j - 1]) ? 0 : 1;
+
+                dp[j] = min({
+                    dp[j - 1] + 1,          
+                    prev_dp[j] + 1,         
+                    prev_dp[j - 1] + cost   
+                });
+            }
+            prev_dp = dp;
+        }
+        return prev_dp[n];
+    }
 };
+
 
 
 
