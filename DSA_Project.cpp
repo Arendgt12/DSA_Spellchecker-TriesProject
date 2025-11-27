@@ -97,6 +97,28 @@ struct Trie {
         return false;
     }
 
+    void findSuggestionsHelper(TrieNode* node, const string& targetWord, 
+                               const string& currentPrefix, 
+                               vector<string>& suggestions, 
+                               int maxDistance) {
+        
+        if (!node) return;
+                               
+        int dist = levenshteinDistance(currentPrefix, targetWord);
+
+        if (dist > maxDistance && currentPrefix.size() > targetWord.size() + maxDistance) {
+            return;
+        }
+
+        if (node->isEnd && dist <= maxDistance && currentPrefix != targetWord) {
+             suggestions.push_back(currentPrefix);
+        }
+
+        for (auto const& pair : node->children) {
+            findSuggestionsHelper(pair.second, targetWord, currentPrefix + pair.first, suggestions, maxDistance);
+        }
+    }
+
 };
 
 
