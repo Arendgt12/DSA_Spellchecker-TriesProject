@@ -55,6 +55,10 @@ struct Trie {
         return current->isEnd;
     }
 
+    void remove(const string& word) {
+        removeHelper(root, word, 0);
+    }
+
 };
 
 
