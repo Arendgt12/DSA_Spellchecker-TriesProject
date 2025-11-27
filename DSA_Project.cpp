@@ -173,11 +173,69 @@ void loadDictionary(Trie& trie, const string& filename) {
 }
 
 
+// --- 4. Main Program Execution ---
+
 int main() {
-
-
-
+    Trie dictionary;
     
-    return 0;
+    // Load dictionary from file
+    loadDictionary(dictionary, "dictionary.txt");
+    
+    if (!dictionary.search("hello")) { 
+        dictionary.insert("hello");
+        dictionary.insert("help");
+        dictionary.insert("hell");
+        dictionary.insert("header");
+        dictionary.insert("helicopter");
+        dictionary.insert("helo"); 
+        cout << "(Added default test words for demonstration.)" << endl;
+    }
+    cout << "---------------------------------------" << endl;
+
+
+    // 1. Test Search
+    cout << "Search 'hello': " << (dictionary.search("hello") ? "Found" : "Not Found") << endl;
+    cout << "Search 'hero': " << (dictionary.search("hero") ? "Found" : "Not Found") << endl;
+    
+    cout << "---------------------------------------" << endl;
+
+    // 2. Test Spell Checker (Substitution error)
+    string misspelledWord1 = "hallo"; 
+    cout << "Checking misspelled word: **" << misspelledWord1 << "**" << endl;
+    vector<string> suggestions1 = dictionary.getSuggestions(misspelledWord1);
+
+    if (!suggestions1.empty()) {
+        cout << "Suggestions (Edit Distance 1):" << endl;
+        for (const string& s : suggestions1) {
+            cout << " - " << s << endl;
+        }
+    } else {
+        cout << "No close suggestions found." << endl;
+    }
+    
+    cout << "---------------------------------------" << endl;
+
+    // 3. Test Spell Checker (Insertion error)
+    string misspelledWord2 = "helol"; 
+    cout << "Checking misspelled word: **" << misspelledWord2 << "**" << endl;
+    vector<string> suggestions2 = dictionary.getSuggestions(misspelledWord2);
+
+    if (!suggestions2.empty()) {
+        cout << "Suggestions (Edit Distance 1):" << endl;
+        for (const string& s : suggestions2) {
+            cout << " - " << s << endl;
+        }
+    } else {
+        cout << "No close suggestions found." << endl;
+    }
+
+    // 4. Test Removal
+    dictionary.remove("hello");
+    cout << "---------------------------------------" << endl;
+    cout << "After removing 'hello': " << (dictionary.search("hello") ? "Found" : "Not Found") << endl;
+    cout << "But 'help' still exists: " << (dictionary.search("help") ? "Found" : "Not Found") << endl;
+
+
+    return 0; // Destructor called here, cleaning up all memory.
 }
 
