@@ -148,7 +148,29 @@ struct Trie {
     }
 };
 
+// --- 3. Dictionary Loading Function ---
 
+void loadDictionary(Trie& trie, const string& filename) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cerr << "Error: Could not open dictionary file: **" << filename << "**" << endl;
+        cerr << "Please create this file and populate it with words (one per line)." << endl;
+        return;
+    }
+
+    string word;
+    int count = 0;
+    while (getline(file, word)) {
+        if (!word.empty()) {
+             
+            transform(word.begin(), word.end(), word.begin(), ::tolower);
+            trie.insert(word);
+            count++;
+        }
+    }
+    file.close();
+    cout << "Dictionary loaded successfully! Total words: " << count << endl;
+}
 
 
 int main() {
