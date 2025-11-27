@@ -55,6 +55,7 @@ struct Trie {
         return current->isEnd;
     }
 
+    //calls the removehelper function
     void remove(const string& word) {
         removeHelper(root, word, 0);
     }
@@ -66,6 +67,34 @@ struct Trie {
         
         findSuggestionsHelper(root, word, "", suggestions, MAX_DISTANCE);
         return suggestions;
+    }
+
+    // --- Helper Functions ---
+
+    bool removeHelper(TrieNode* node, const string& word, int depth) {
+        if (!node) return false;
+
+        if (depth == word.size()) {
+            if (!node->isEnd) return false;
+            node->isEnd = false;
+            return node->children.empty();
+        }
+
+        char ch = word[depth];
+        auto it = node->children.find(ch);
+        if (it == node->children.end())
+            return false;
+
+        bool shouldDeleteChild = removeHelper(it->second, word, depth + 1);
+
+        if (shouldDeleteChild) {
+            delete it->second;
+            node->children.erase(it);
+
+            return (!node->isEnd && node->children.empty());
+        }
+
+        return false;
     }
 
 };
